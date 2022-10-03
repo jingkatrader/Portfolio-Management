@@ -87,8 +87,12 @@ if __name__ == "__main__":
     NYSE_stocks_ret.to_pickle("NYSE ret.pickle")
     NYSE_residuals.to_pickle("NYSE residuals.pickle")
 
+    NYSE_stocks_ret = pd.read_pickle("NYSE ret.pickle")
+    NYSE_residuals = pd.read_pickle("NYSE residuals.pickle")
+    NYSE_stocks_metadata = pd.read_pickle('NYSE stocks metadata.pickle')
 
-    selected_stocks = NYSE_stocks_ret.loc['2020-01-01':].dropna(axis=1).columns #remove stocks only listed post-2020
+    larger_than_1B = NYSE_stocks_metadata.T[NYSE_stocks_metadata.loc['MarketCapitalization'].astype(float) > 1000000000].index
+    selected_stocks = NYSE_stocks_ret.loc['2020-01-01':, larger_than_1B].dropna(axis=1).columns #remove stocks only listed post-2020
     monthly_NYSE_ret = (1+NYSE_stocks_ret[selected_stocks]).resample('M').prod()-1
     bucket_return_combined = build_low_vol_factor(monthly_NYSE_ret, NYSE_residuals[selected_stocks].shift(22),
                                                   30, 15, [0.1, 0.3,0.7,0.9]) # shift by 22D to remove look-ahead bias

@@ -1,4 +1,5 @@
 ETF_PRICE_DIR = 'Historical ETF prices'
 SINGLE_NAME_DIR = 'Historical single name prices'
+SINGLE_NAME_METADATA_DIR = 'Single name metadata'
 INPUT_PATH = 'INPUT_cfg'
 FF_PATH = 'FF-3factor'
